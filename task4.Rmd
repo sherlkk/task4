@@ -15,4 +15,45 @@ output: html_document
 
 Located within the data folder:
 
+* HDI data from: http://hdr.undp.org/en/indicators/68606#
+* Shapefile from: https://hub.arcgis.com/datasets/2b93b06dc0dc4e809d3c8db5cb96ba69_0/explore?location=-0.051073%2C0.000000%2C1.00
+
+```{r}
+library(tidyverse)
+library(sf)
+library(here)
+library(janitor)
+library(countrycode)
+```
+
+```{r}
+HDI <- read_csv(here::here("data", "Gender Inequality Index (GII).csv"),
+                locale = locale(encoding = "latin1"),
+                na = "..", skip = 5)
+world <- st_read(here::here("data", "World_Countries__Generalized_.shp"))
+```
+```{r}
+HDIcols <- HDI %>%
+  clean_names() %>%
+  select(country, x2019, x2010) %>%
+  mutate(difference=x2019-x2010) %>%
+  slice(1:189, ) %>%
+  mutate(iso_code=countrycode(HDIcols$country, origin = "country.name", destination = "iso2c"))
+  
+```
+
+## Join
+Join the csv to world shape file (left join)
+```{r}
+Join_HDI <- world %>%
+  clean_names() %>%
+  left_join(.,
+            HDIcols,
+            by = c("aff_iso" = "iso_code"))
+```
+
+
+
+
+
 
