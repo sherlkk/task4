@@ -1,0 +1,18 @@
+---
+title: "task4"
+output: html_document
+---
+
+```{r first, eval=FALSE}
+# i have take a snapshot eith
+# renv::snapshot()
+
+# install the same packages
+# renv:::restore()
+```
+
+### Read in data:
+
+Located within the data folder:
+
+
